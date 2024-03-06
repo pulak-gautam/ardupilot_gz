@@ -23,7 +23,7 @@ The project is adapted from the [`ros_gz_project_template`](https://github.com/g
 - Install [Gazebo Garden](https://gazebosim.org/docs/garden)
 - Follow the [`Installing Build Dependencies`](https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_DDS#installing-build-dependencies) section of `AP_DDS`'s README
 
-## Install
+## Source Install
 
 #### 1. Create a workspace folder
 
@@ -68,6 +68,37 @@ colcon build --cmake-args -DBUILD_TESTING=ON
 source ./install/setup.bash
 colcon test --packages-select ardupilot_sitl ardupilot_dds_tests ardupilot_gazebo ardupilot_gz_applications ardupilot_gz_description ardupilot_gz_gazebo ardupilot_gz_bringup
 colcon test-result --all --verbose
+```
+
+## Binary Install
+```bash
+# Install micro_ros vulcanexus binary
+sudo curl -sSL https://raw.githubusercontent.com/eProsima/vulcanexus/main/vulcanexus.key -o /usr/share/keyrings/vulcanexus-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/vulcanexus-archive-keyring.gpg] http://repo.vulcanexus.org/debian $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/vulcanexus.list > /dev/null
+sudo apt update -y
+sudo apt-get install vulcanexus-humble-micro
+ 
+# Source vulcanexus packages
+echo "source /opt/vulcanexus/humble/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+ 
+# Binary install for gz_garden ros_gz package for humble
+sudo apt-get install ros-humble-ros-gzgarden 
+sudo apt-get install ros-humble-topic-tools-interfaces ros-humble-topic-tools ros-humble-topic-tools-interfaces
+ 
+# Inside the folder where you downloaded
+sudo dpkg -i \ 
+ros-humble-ardupilot-gz-description_0.0.0-0jammy_amd64.deb \ 
+ros-humble-ardupilot-gz-gazebo_0.0.0-0jammy_amd64.deb \ 
+ros-humble-ardupilot-msgs_0.0.0-0jammy_amd64.deb \
+ros-humble-ardupilot-gazebo_0.0.0-0jammy_amd64.deb
+ 
+sudo dpkg -i \
+ros-humble-ardupilot-sitl-models_0.0.0-0jammy_amd64.deb \
+ros-humble-ardupilot-sitl_0.0.0-0jammy_amd64.deb   
+ 
+sudo dpkg -i \
+ros-humble-ardupilot-gz-bringup_0.0.0-0jammy_amd64.deb
 ```
 
 ## Usage
